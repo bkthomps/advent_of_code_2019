@@ -6,14 +6,26 @@ mod day_5;
 
 use std::fs;
 use std::string;
+use std::thread;
 use std::vec;
 
 fn main() {
-    println!("Day 1: {} {}", day_1::puzzle_1::compute(), day_1::puzzle_2::compute());
-    println!("Day 2: {} {}", day_2::puzzle_1::compute(), day_2::puzzle_2::compute());
-    println!("Day 3: {} {}", day_3::puzzle_1::compute(), day_3::puzzle_2::compute());
-    println!("Day 4: {} {}", day_4::puzzle_1::compute(), day_4::puzzle_2::compute());
-    println!("Day 5: {} {}", day_5::puzzle_1::compute(), day_5::puzzle_2::compute());
+    let mut threads: vec::Vec<thread::JoinHandle<i32>> = vec::Vec::new();
+    threads.push(thread::spawn(|| day_1::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_1::puzzle_2::compute()));
+    threads.push(thread::spawn(|| day_2::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_2::puzzle_2::compute()));
+    threads.push(thread::spawn(|| day_3::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_3::puzzle_2::compute()));
+    threads.push(thread::spawn(|| day_4::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_4::puzzle_2::compute()));
+    threads.push(thread::spawn(|| day_5::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_5::puzzle_2::compute()));
+    for i in (0..threads.len() / 2).rev() {
+        let puzzle_2 = threads.remove(threads.len() - 1).join().unwrap();
+        let puzzle_1 = threads.remove(threads.len() - 1).join().unwrap();
+        println!("Day {}: {} {}", i + 1, puzzle_1, puzzle_2);
+    }
 }
 
 pub fn get_input(file_name: &str, separator: &str) -> vec::Vec<string::String> {

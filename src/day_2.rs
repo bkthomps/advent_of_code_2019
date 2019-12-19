@@ -1,7 +1,7 @@
 pub mod puzzle_1 {
     use std::vec;
 
-    pub fn compute() -> usize {
+    pub fn compute() -> i32 {
         let inputs = crate::get_input("day-2.txt", ",");
         let mut values: Vec<usize> = Vec::new();
         for input in inputs {
@@ -11,7 +11,7 @@ pub mod puzzle_1 {
         values[1] = 12;
         values[2] = 2;
         calculation(&mut values);
-        return values[0];
+        return values[0] as i32;
     }
 
     fn calculation(values: &mut vec::Vec<usize>) {
@@ -33,7 +33,7 @@ pub mod puzzle_1 {
 pub mod puzzle_2 {
     use std::vec;
 
-    pub fn compute() -> usize {
+    pub fn compute() -> i32 {
         let inputs = crate::get_input("day-2.txt", ",");
         let mut values: Vec<usize> = Vec::new();
         for input in inputs {
@@ -45,7 +45,7 @@ pub mod puzzle_2 {
                 let clone = values.clone();
                 let value = compute_with(clone, i, j);
                 if value == 19690720 {
-                    return 100 * i + j;
+                    return 100 * i as i32 + j as i32;
                 }
             }
         }
