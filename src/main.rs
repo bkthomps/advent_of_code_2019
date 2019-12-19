@@ -11,7 +11,7 @@ fn main() {
     println!("Day 1: {} {}", day_1::puzzle_1::compute(), day_1::puzzle_2::compute());
     println!("Day 2: {} {}", day_2::puzzle_1::compute(), day_2::puzzle_2::compute());
     println!("Day 3: {} {}", day_3::puzzle_1::compute(), day_3::puzzle_2::compute());
-    println!("Day 4: {}", day_4::puzzle_1::compute());
+    println!("Day 4: {} {}", day_4::puzzle_1::compute(), day_4::puzzle_2::compute());
 }
 
 pub fn get_input(file_name: &str, separator: &str) -> vec::Vec<string::String> {
