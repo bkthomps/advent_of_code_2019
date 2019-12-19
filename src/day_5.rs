@@ -19,7 +19,7 @@ pub mod puzzle_1 {
             let two = values[index] / 1000 % 10;
             let three = values[index] / 10_000 % 10;
             match op_code {
-                1 => {
+                1 | 2 => {
                     let mut lhs = values[index + 1];
                     if one == 0 {
                         lhs = values[lhs as usize];
@@ -32,23 +32,7 @@ pub mod puzzle_1 {
                     if three == 0 {
                         element = values[element as usize];
                     }
-                    values[element as usize] = lhs + rhs;
-                    index += 4;
-                }
-                2 => {
-                    let mut lhs = values[index + 1];
-                    if one == 0 {
-                        lhs = values[lhs as usize];
-                    }
-                    let mut rhs = values[index + 2];
-                    if two == 0 {
-                        rhs = values[rhs as usize];
-                    }
-                    let mut element = index as i32 + 3;
-                    if three == 0 {
-                        element = values[element as usize];
-                    }
-                    values[element as usize] = lhs * rhs;
+                    values[element as usize] = if op_code == 1 { lhs + rhs } else { lhs * rhs };
                     index += 4;
                 }
                 3 => {
