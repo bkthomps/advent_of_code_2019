@@ -1,38 +1,30 @@
 pub mod puzzle_1 {
+    use std::collections::HashSet;
     use std::cmp;
     use std::string;
     use std::vec;
 
     pub fn compute() -> i32 {
         let inputs = crate::get_input("day-7.txt", ",");
-        let mut max = 0;
-        for a in 0..5 {
-            let one = computer(&inputs, a, 0);
-            for b in 0..5 {
-                if b == a {
-                    continue;
-                }
-                let two = computer(&inputs, b, one);
-                for c in 0..5 {
-                    if c == b || c == a {
-                        continue;
-                    }
-                    let three = computer(&inputs, c, two);
-                    for d in 0..5 {
-                        if d == c || d == b || d == a {
-                            continue;
-                        }
-                        let four = computer(&inputs, d, three);
-                        for e in 0..5 {
-                            if e == d || e == c || e == b || e == a {
-                                continue;
-                            }
-                            let five = computer(&inputs, e, four);
-                            max = cmp::max(max, five);
-                        }
-                    }
-                }
+        let mut options = HashSet::new();
+        for n in 0..5 {
+            options.insert(n);
+        }
+        return amplify(&inputs, options, 0);
+    }
+
+    fn amplify(inputs: &vec::Vec<string::String>, options: HashSet<i32>, input: i32) -> i32 {
+        if options.len() == 1 {
+            for n in &options {
+                return computer(inputs, *n, input);
             }
+        }
+        let mut max = 0;
+        for n in &options {
+            let result = computer(inputs, *n, input);
+            let mut new_options = options.clone();
+            new_options.remove(n);
+            max = cmp::max(max, amplify(inputs, new_options, result));
         }
         return max;
     }
