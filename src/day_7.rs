@@ -148,7 +148,7 @@ pub mod puzzle_2 {
         let mut stop = false;
         let mut last_output = [0; 5];
         let mut addresses = [0; 5];
-        while !stop || index != settings.len() - 1 {
+        while !stop || index != 0 {
             let (output, stopping, address) =
                     calculation(&mut amplifiers[index], settings[index], input, last_output[index],
                                 addresses[index]);
