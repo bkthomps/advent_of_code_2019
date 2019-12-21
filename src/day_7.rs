@@ -147,12 +147,15 @@ pub mod puzzle_2 {
         let mut input = 0;
         let mut stop = false;
         let mut last_output = [0; 5];
+        let mut addresses = [0; 5];
         while !stop || index != settings.len() - 1 {
-            let (output, stopping) =
-                    calculation(&mut amplifiers[index], settings[index], input, last_output[index]);
+            let (output, stopping, address) =
+                    calculation(&mut amplifiers[index], settings[index], input, last_output[index],
+                                addresses[index]);
             last_output[index] = output;
             input = output;
             stop = stopping;
+            addresses[index] = address;
             settings[index] = -1;
             index += 1;
             index %= settings.len();
@@ -161,8 +164,7 @@ pub mod puzzle_2 {
     }
 
     fn calculation(values: &mut vec::Vec<i32>, mut option: i32, mut input: i32,
-                   last_output: i32) -> (i32, bool) {
-        let mut index = 0;
+                   last_output: i32, mut index: usize) -> (i32, bool, usize) {
         while values[index] != 99 {
             let op_code = values[index] % 100;
             let one = values[index] / 100 % 10;
@@ -196,12 +198,10 @@ pub mod puzzle_2 {
                         let element = values[index + 1];
                         values[element as usize] = option;
                         option = -1;
-                    } else if input != -1 {
+                    } else {
                         let element = values[index + 1];
                         values[element as usize] = input;
                         input = -1;
-                    } else {
-                        return (last_output, true);
                     }
                     index += 2;
                 }
@@ -210,7 +210,7 @@ pub mod puzzle_2 {
                     if one == 0 {
                         element = values[element as usize];
                     }
-                    return (values[element as usize], false);
+                    return (values[element as usize], false, index + 2);
                 }
                 5 | 6 => {
                     let mut compare = values[index + 1];
@@ -230,6 +230,6 @@ pub mod puzzle_2 {
                 _ => println!("Invalid operation")
             }
         }
-        return (last_output, true);
+        return (last_output, true, index);
     }
 }
