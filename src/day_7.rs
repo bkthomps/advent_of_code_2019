@@ -163,8 +163,8 @@ pub mod puzzle_2 {
         return input;
     }
 
-    fn calculation(values: &mut vec::Vec<i32>, mut option: i32, mut input: i32,
-                   last_output: i32, mut index: usize) -> (i32, bool, usize) {
+    fn calculation(values: &mut vec::Vec<i32>, mut option: i32, input: i32, last_output: i32,
+                   mut index: usize) -> (i32, bool, usize) {
         while values[index] != 99 {
             let op_code = values[index] % 100;
             let one = values[index] / 100 % 10;
@@ -201,7 +201,6 @@ pub mod puzzle_2 {
                     } else {
                         let element = values[index + 1];
                         values[element as usize] = input;
-                        input = -1;
                     }
                     index += 2;
                 }
