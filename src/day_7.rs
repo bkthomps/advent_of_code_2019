@@ -128,13 +128,7 @@ pub mod puzzle_2 {
 
     fn choose_settings(options: HashSet<i32>, settings: vec::Vec<i32>, values: &Vec<i32>) -> i32 {
         if options.is_empty() {
-            let mut amplifiers = [vec::Vec::new(), vec::Vec::new(), vec::Vec::new(),
-                vec::Vec::new(), vec::Vec::new()];
-            amplifiers[0].push(0);
-            for i in 0..amplifiers.len() {
-                amplifiers[i].push(settings[i]);
-            }
-            return simulate(&mut amplifiers, &values);
+            return simulate(settings, values);
         }
         let mut max = 0;
         for n in &options {
@@ -147,29 +141,27 @@ pub mod puzzle_2 {
         return max;
     }
 
-    fn simulate(amplifiers: &mut [vec::Vec<i32>; 5], values: &Vec<i32>) -> i32 {
-        let mut arguments =
-                [values.clone(), values.clone(), values.clone(), values.clone(), values.clone()];
+    fn simulate(mut settings: vec::Vec<i32>, values: &Vec<i32>) -> i32 {
+        let mut amplifiers = [values.clone(), values.clone(), values.clone(), values.clone(), values.clone()];
         let mut index = 0;
+        let mut input = 0;
         let mut stop = false;
-        while !stop || index != amplifiers.len() - 1 {
-            let old_index = index;
+        let mut last_output = [0; 5];
+        while !stop || index != settings.len() - 1 {
+            let (output, stopping) =
+                    calculation(&mut amplifiers[index], settings[index], input, last_output[index]);
+            last_output[index] = output;
+            input = output;
+            stop = stopping;
+            settings[index] = -1;
             index += 1;
-            if index == amplifiers.len() {
-                index = 0;
-            }
-            let (output, new_stop) = calculation(&mut arguments[old_index],
-                                                 amplifiers[old_index].clone());
-            stop = new_stop;
-            // TODO: make input from the amplifier, so that when one amplifier outputs, it
-            // TODO: immediately adds it to the input of the other amplifier without waiting for
-            // TODO: the next amplifier to output something
-            amplifiers[index].insert(0, output);
+            index %= settings.len();
         }
-        return amplifiers[0][0];
+        return input;
     }
 
-    fn calculation(values: &mut vec::Vec<i32>, mut input: vec::Vec<i32>) -> (i32, bool) {
+    fn calculation(values: &mut vec::Vec<i32>, mut option: i32, mut input: i32,
+                   last_output: i32) -> (i32, bool) {
         let mut index = 0;
         while values[index] != 99 {
             let op_code = values[index] % 100;
@@ -200,15 +192,25 @@ pub mod puzzle_2 {
                     index += 4;
                 }
                 3 => {
-                    return (input.remove(input.len() - 1), false);
+                    if option != -1 {
+                        let element = values[index + 1];
+                        values[element as usize] = option;
+                        option = -1;
+                    } else if input != -1 {
+                        let element = values[index + 1];
+                        values[element as usize] = input;
+                        input = -1;
+                    } else {
+                        return (last_output, true);
+                    }
+                    index += 2;
                 }
                 4 => {
                     let mut element = index as i32 + 1;
                     if one == 0 {
                         element = values[element as usize];
                     }
-                    input.push(values[element as usize]);
-                    index += 2;
+                    return (values[element as usize], false);
                 }
                 5 | 6 => {
                     let mut compare = values[index + 1];
@@ -228,6 +230,6 @@ pub mod puzzle_2 {
                 _ => println!("Invalid operation")
             }
         }
-        return (input.remove(input.len() - 1), true);
+        return (last_output, true);
     }
 }
