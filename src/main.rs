@@ -29,7 +29,7 @@ fn main() {
     threads.push(thread::spawn(|| day_7::puzzle_1::compute()));
     threads.push(thread::spawn(|| day_7::puzzle_2::compute()));
     threads.push(thread::spawn(|| day_8::puzzle_1::compute()));
-    threads.push(thread::spawn(|| day_8::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_8::puzzle_2::compute(false)));
     for i in (0..threads.len() / 2).rev() {
         let puzzle_2 = threads.remove(threads.len() - 1).join().unwrap();
         let puzzle_1 = threads.remove(threads.len() - 1).join().unwrap();
