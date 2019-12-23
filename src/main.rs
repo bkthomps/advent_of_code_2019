@@ -31,8 +31,8 @@ fn main() {
     threads.push(thread::spawn(|| day_7::puzzle_2::compute() as i64));
     threads.push(thread::spawn(|| day_8::puzzle_1::compute() as i64));
     threads.push(thread::spawn(|| day_8::puzzle_2::compute(false) as i64));
-    threads.push(thread::spawn(|| day_9::puzzle_1::compute()));
-    threads.push(thread::spawn(|| day_9::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_9::puzzle_1_and_2::compute(1)));
+    threads.push(thread::spawn(|| day_9::puzzle_1_and_2::compute(2)));
     for i in (0..threads.len() / 2).rev() {
         let puzzle_2 = threads.remove(threads.len() - 1).join().unwrap();
         let puzzle_1 = threads.remove(threads.len() - 1).join().unwrap();

@@ -1,18 +1,18 @@
-pub mod puzzle_1 {
+pub mod puzzle_1_and_2 {
     use std::vec;
 
     const POSITION_MODE: i64 = 0;
     const PARAMETER_MODE: i64 = 1;
     const RELATIVE_MODE: i64 = 2;
 
-    pub fn compute() -> i64 {
+    pub fn compute(input: i64) -> i64 {
         let inputs = crate::get_input("day-9.txt", ",");
         let mut values: Vec<i64> = Vec::new();
         for input in inputs {
             let val = input.parse().expect("Could not cast to int");
             values.push(val);
         }
-        return calculation(&mut values, 1);
+        return calculation(&mut values, input);
     }
 
     fn calculation(values: &mut vec::Vec<i64>, initial_input: i64) -> i64 {
