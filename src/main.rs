@@ -7,6 +7,7 @@ mod day_6;
 mod day_7;
 mod day_8;
 mod day_9;
+mod day_10;
 
 use std::fs;
 use std::string;
@@ -33,6 +34,8 @@ fn main() {
     threads.push(thread::spawn(|| day_8::puzzle_2::compute(false) as i64));
     threads.push(thread::spawn(|| day_9::puzzle_1_and_2::compute(1)));
     threads.push(thread::spawn(|| day_9::puzzle_1_and_2::compute(2)));
+    threads.push(thread::spawn(|| day_10::puzzle_1::compute()));
+    threads.push(thread::spawn(|| day_10::puzzle_1::compute()));
     for i in (0..threads.len() / 2).rev() {
         let puzzle_2 = threads.remove(threads.len() - 1).join().unwrap();
         let puzzle_1 = threads.remove(threads.len() - 1).join().unwrap();
